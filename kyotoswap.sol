@@ -15,30 +15,33 @@ contract KyotoSwap is IERC20, Ownable {
 
 	constructor(
 	    address _busd,
-        address _kyo,
-        uint _availablekyo;
+            address _kyo,
+            uint _availablekyo;
 	){
-		busd = IERC20(_busd);
-		kyo = IERC20(_kyo);
-		kyo.increaseAllowance(address(this), _availablekyo);
-		availablekyo = _availablekyo;
+	    busd = IERC20(_busd);
+	    kyo = IERC20(_kyo);
+	    kyo.increaseAllowance(address(this), _availablekyo);
+	    availablekyo = _availablekyo;
 	}
 
 	function swap(uint _amountbusd, uint _amountkyo) public {
-		require(_amountbusd > 0);
-		require(_amountbusd <= busd.balanceOf[_msgSender()]);
-		_amountkyo = _amountbusd.tryDiv(10);
-		require(_amountkyo >= availablekyo);
-		busd.increaseAllowance(address(this), _amountbusd);
-		busd.transferFrom(_msgSender(), owner(), _amountbusd);
-		kyo.transferFrom(owner(), _msgSender(), _amountkyo);
-		availablekyo = availablekyo.trySub(_amountkyo);		
+	    require(_amountbusd > 0);
+	    require(_amountbusd <= busd.balanceOf[_msgSender()]);
+	    _amountkyo = _amountbusd.tryDiv(10);
+	    require(_amountkyo >= availablekyo);
+		
+	    busd.increaseAllowance(address(this), _amountbusd);
+	    busd.transferFrom(_msgSender(), owner(), _amountbusd);
+	    
+	    kyo.transferFrom(owner(), _msgSender(), _amountkyo);
+	    availablekyo = availablekyo.trySub(_amountkyo);		
 	}
 
 	function addkyo(uint _amountkyo) public onlyOwner {
-		require(_amountkyo > 0);
-		require(_amountkyo <= kyo.balanceOf[_msgSender()]);
-		kyo.increaseAllowance(address(this), _amountkyo);
-		availablekyo = availablekyo.tryAdd(_amountkyo);
+	    require(_amountkyo > 0);
+	    require(_amountkyo <= kyo.balanceOf[_msgSender()]);
+	    
+	    kyo.increaseAllowance(address(this), _amountkyo);
+	    availablekyo = availablekyo.tryAdd(_amountkyo);
 	}
 }
