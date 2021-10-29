@@ -24,11 +24,11 @@ contract KyotoSwap is IERC20, Ownable {
 	availablekyo = _availablekyo;
     }
 
-    function swap(uint _amountbusd, uint _amountkyo) public {
+    function swap(uint _amountbusd) public {
 	require(_amountbusd > 0);
 	require(_amountbusd <= busd.balanceOf[_msgSender()]);
-	_amountkyo = _amountbusd.tryDiv(10);
-	require(_amountkyo >= availablekyo);
+	uint amountkyo = _amountbusd.tryDiv(10);
+	require(amountkyo >= availablekyo);
 		
 	busd.increaseAllowance(address(this), _amountbusd);
 	busd.transferFrom(_msgSender(), owner(), _amountbusd);
