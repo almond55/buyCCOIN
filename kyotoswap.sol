@@ -9,8 +9,6 @@ contract KyotoSwap is IERC20, Ownable {
 
     IERC20 public busd;
     IERC20 public kyo;
-    uint public amountbusd;
-    uint public amountkyo;
     uint public availablekyo;
 
     constructor(
