@@ -12,8 +12,8 @@ abstract contract KyotoSwap is IERC20, Ownable {
 	IERC20 public kyo;
 
 	constructor (
-	    address _busd,
-        address _kyo
+	    	address _busd,
+        	address _kyo
 	){
 		busd = IERC20(_busd);
 		kyo = IERC20(_kyo);
