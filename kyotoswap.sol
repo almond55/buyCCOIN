@@ -10,27 +10,34 @@ abstract contract KyotoSwap is IERC20, Ownable {
 
 	IERC20 public busd;
 	IERC20 public kyo;
+	uint256 public amountkyo;
 
 	constructor (
-	    	address _busd,
-        	address _kyo
+	    address _busd,
+        address _kyo,
+        uint256 _amountkyo
 	){
 		busd = IERC20(_busd);
 		kyo = IERC20(_kyo);
+		kyo.approve(address(this), _amountkyo);
+		amountkyo = _amountkyo;
 	}
 
 	function swap(uint256 _amountbusd) public {
 		require(_amountbusd > 0);
 		require(_amountbusd <= busd.balanceOf(_msgSender()));
-		uint256 amountkyo = _amountbusd.mul(10);
+		uint256 _amountkyo = _amountbusd.mul(10);
+		require(_amountkyo <= amountkyo);
 		busd.approve(address(this), _amountbusd);
 		busd.transferFrom(_msgSender(), owner(), _amountbusd);
-		kyo.transferFrom(owner(), _msgSender(), amountkyo);
+		kyo.transferFrom(owner(), _msgSender(), _amountkyo);
+		amountkyo = amountkyo.sub(_amountkyo);
 	}
 	
-	function addkyo(uint _amountkyo) public onlyOwner {
+	function addamountkyo(uint256 _amountkyo) public onlyOwner {
 		require(_amountkyo > 0);
 		require(_amountkyo <= kyo.balanceOf(_msgSender()));
 		kyo.approve(address(this), _amountkyo);
+		amountkyo = amountkyo.add(_amountkyo);
 	}
 }
