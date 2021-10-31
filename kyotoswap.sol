@@ -19,7 +19,7 @@ contract KyotoSwap is IERC20, Ownable {
 	){
 		busd = IERC20(_busd);
 		kyo = IERC20(_kyo);
-		kyo.approve(address(this), _amountkyo);
+		kyo.approve(address(this), _amountkyo * 10**18);
 		amountkyo = _amountkyo;
 	}
 
