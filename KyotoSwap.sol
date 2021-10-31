@@ -28,7 +28,7 @@ contract KyotoSwap is IERC20, Ownable {
 		require(_amountbusd <= busd.balanceOf(_msgSender()));
 		uint256 _amountkyo = _amountbusd.mul(10);
 		require(_amountkyo <= amountkyo);
-		busd.transfer(_msgSender(), owner(), _amountbusd);
+		busd.transfer(owner(), _amountbusd);
 		kyo.transferFrom(owner(), _msgSender(), _amountkyo);
 		amountkyo = amountkyo.sub(_amountkyo);
 	}
