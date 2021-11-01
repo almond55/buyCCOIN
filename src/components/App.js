@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import Web3 from 'web3'
 
 import KyotoSwap from '../abis/KyotoSwap.json'
+import Token from '../abis/BusdCoin.json'
 import Navbar from './Navbar'
 import Main from './Main'
 import './App.css'
@@ -19,7 +20,17 @@ class App extends Component {
     const accounts = await web3.eth.getAccounts()
     this.setState({ account: accounts[0] })
 
+    // Load Token
     const networkId =  await web3.eth.net.getId()
+    const tokenData = Token.networks[networkId]
+    if(tokenData) {
+      const token = new web3.eth.Contract(Token.abi, tokenData.address)
+      this.setState({ token })
+      let tokenBalance = await token.methods.balanceOf(this.state.account).call()
+      this.setState({ tokenBalance: tokenBalance.toString() })
+    } else {
+      window.alert('Token contract not deployed to detected network.')
+    }
 
     // Load KyotoSwap
     const kyoSwapData = KyotoSwap.networks[networkId]
@@ -46,11 +57,13 @@ class App extends Component {
     }
   }
 
-  buyTokens = (busdAmount) => {
+  buyTokens = (tokenAmount) => {
     this.setState({ loading: true })
-    this.state.kyoSwap.methods.swap(busdAmount).send({ from: this.state.account }).on('transactionHash', (hash) => {
-      this.setState({ loading: false })
-    })
+    this.state.token.methods.approve(this.state.kyoSwap.address, tokenAmount).send({ from: this.state.account }).on('transactionHash', (hash) => {
+      this.state.kyoSwap.methods.swap(tokenAmount).send({ from: this.state.account }).on('transactionHash', (hash) => {
+        this.setState({ loading: false })
+      })
+    })  
   }
 
   constructor(props) {

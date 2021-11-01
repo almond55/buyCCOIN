@@ -65,3 +65,4 @@ class BuyForm extends Component {
 }
 
 export default BuyForm;
+s
