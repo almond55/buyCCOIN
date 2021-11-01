@@ -8,43 +8,58 @@ import "./SafeMath.sol";
 contract KyotoSwap is IERC20, Ownable {
 	using SafeMath for uint256;
 
-	IERC20 public busd;
-	IERC20 public kyo;
-	uint256 public amountkyo;
+	IERC20 busd;
+	IERC20 kyo;
 
-	constructor (
-	    address _busd,
-        address _kyo,
-        uint256 _amountkyo
-	){
+	constructor(address _busd, address _kyo) {
 		busd = IERC20(_busd);
 		kyo = IERC20(_kyo);
-		kyo.approve(address(this), _amountkyo * 10**18);
-		amountkyo = _amountkyo;
 	}
 
 	function swap(uint256 _amountbusd) public {
 		require(_amountbusd > 0);
-		require(_amountbusd <= busd.balanceOf(_msgSender()));
+		require(_amountbusd <= busd.balanceOf(_msgSender()),
+			"BUSD in wallet too low."
+		);
+
 		uint256 _amountkyo = _amountbusd.mul(10);
-		require(_amountkyo <= amountkyo);
-		busd.transfer(owner(), _amountbusd);
-		kyo.transferFrom(owner(), _msgSender(), _amountkyo);
-		amountkyo = amountkyo.sub(_amountkyo);
+
+		require(busd.allowance(_msgSender(), address(this)) >= _amountbusd,
+			"BUSD allowance too low."
+		);
+		
+		_safeTransferFrom(busd, _msgSender(), owner(), _amountbusd);
+		kyo.transfer(_msgSender(), _amountkyo);
 	}
-	
-	function addamountkyo(uint256 _amountkyo) public onlyOwner {
-		require(_amountkyo > 0);
-		require(_amountkyo <= kyo.balanceOf(_msgSender()));
-		kyo.approve(address(this), _amountkyo);
-		amountkyo = amountkyo.add(_amountkyo);
+
+	function approvekyo(uint256 amount) public onlyOwner {
+		_safeApprove(kyo, address(this), amount);
 	}
-	
-	// implementations required to use interface
-    function allowance(address owner, address spender) external override view returns (uint256) {}
-    function approve(address spender, uint256 amount) external override returns (bool) {}
-    function balanceOf(address account) external override view returns (uint256) {}
-    function totalSupply() external override view returns (uint256) {}
-    function transfer(address recipient, uint256 amount) external override returns (bool) {}
-    function transferFrom(address sender,  address recipient, uint256 amount) external override returns (bool) {}
+
+	function _safeApprove(
+    	IERC20 token,
+    	address recipient,
+    	uint256 amount
+	) private returns (bool) {
+		bool approval = token.approve(recipient, amount);
+		require(approval, "Token amount failed to approve");
+		return true;
+	}
+
+	function _safeTransferFrom(
+		IERC20 token,
+		address sender,
+		address recipient,
+		uint256 amount
+	) private {
+		bool send = token.transferFrom(sender, recipient, amount);
+		require(send, "Token transfer failed.");
+	}
+
+	function allowance(address owner, address spender) external virtual view returns (uint256) {}
+	function approve(address spender, uint256 amount) external virtual returns (bool) {}
+	function balanceOf(address account) external virtual view returns (uint256) {}
+	function totalSupply() external virtual view returns (uint256) {}
+	function transfer(address recipient, uint256 amount) external virtual returns (bool) {}
+	function transferFrom(address sender, address recipient, uint256 amount) external virtual returns (bool) {}
 }
