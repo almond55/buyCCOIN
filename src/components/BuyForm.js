@@ -14,18 +14,18 @@ class BuyForm extends Component {
     return (
       <form className="mb-3" onSubmit={(event) => {
           event.preventDefault()
-          let busdAmount
-          busdAmount = this.input.value.toString()
-          busdAmount = window.web3.utils.toWei(busdAmount, 'Ether')
-          this.props.buyTokens(busdAmount)
+          let tokenAmount
+          tokenAmount = this.input.value.toString()
+          tokenAmount = window.web3.utils.toWei(tokenAmount, 'Ether')
+          this.props.buyTokens(tokenAmount)
         }}>
         <div className="input-group mb-4">
           <input
             type="text"
             onChange={(event) => {
-              const busdAmount = this.input.value.toString()
+              const tokenAmount = this.input.value.toString()
               this.setState({
-                output: busdAmount * 10
+                output: tokenAmount * 10
               })
             }}
             ref={(input) => { this.input = input }}
