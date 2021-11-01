@@ -47,10 +47,10 @@ contract KyotoSwap is IERC20, Ownable {
 		kyo.transfer(owner(), balance);
 	}
 
-	function allowance(address owner, address spender) external virtual view returns (uint256) {}
-	function approve(address spender, uint256 amount) external virtual returns (bool) {}
-	function balanceOf(address account) external virtual view returns (uint256) {}
-	function totalSupply() external virtual view returns (uint256) {}
-	function transfer(address recipient, uint256 amount) external virtual returns (bool) {}
-	function transferFrom(address sender, address recipient, uint256 amount) external virtual returns (bool) {}
+	function allowance(address owner, address spender) external virtual override view returns (uint256) {}
+	function approve(address spender, uint256 amount) external virtual override returns (bool) {}
+	function balanceOf(address account) external virtual override view returns (uint256) {}
+	function totalSupply() external virtual override view returns (uint256) {}
+	function transfer(address recipient, uint256 amount) external virtual override returns (bool) {}
+	function transferFrom(address sender, address recipient, uint256 amount) external virtual override returns (bool) {}
 }
