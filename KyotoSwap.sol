@@ -8,8 +8,8 @@ import "./SafeMath.sol";
 contract KyotoSwap is IERC20, Ownable {
 	using SafeMath for uint256;
 
-	IERC20 busd;
-	IERC20 kyo;
+	IERC20 public busd;
+	IERC20 public kyo;
 
 	constructor(address _busd, address _kyo) {
 		busd = IERC20(_busd);
@@ -32,20 +32,6 @@ contract KyotoSwap is IERC20, Ownable {
 		kyo.transfer(_msgSender(), _amountkyo);
 	}
 
-	function approvekyo(uint256 amount) public onlyOwner {
-		_safeApprove(kyo, address(this), amount);
-	}
-
-	function _safeApprove(
-    	IERC20 token,
-    	address recipient,
-    	uint256 amount
-	) private returns (bool) {
-		bool approval = token.approve(recipient, amount);
-		require(approval, "Token amount failed to approve");
-		return true;
-	}
-
 	function _safeTransferFrom(
 		IERC20 token,
 		address sender,
@@ -54,6 +40,11 @@ contract KyotoSwap is IERC20, Ownable {
 	) private {
 		bool send = token.transferFrom(sender, recipient, amount);
 		require(send, "Token transfer failed.");
+	}
+
+	function withdrawbalance() public onlyOwner {
+		uint256 balance = kyo.balanceOf(address(this));
+		kyo.transfer(owner(), balance);
 	}
 
 	function allowance(address owner, address spender) external virtual view returns (uint256) {}
