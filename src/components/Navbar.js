@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import Identicon from 'identicon.js';
+import kyotoNetwork from '../KyotoSwapHeader.png';
 
 class Navbar extends Component {
 
@@ -12,7 +13,7 @@ class Navbar extends Component {
           target="_blank"
           rel="noopener noreferrer"
         >
-          KyotoSwap
+          <img src={kyotoNetwork} height='48' alt=""/>
         </a>
 
         <ul className="navbar-nav px-3">
