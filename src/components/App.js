@@ -24,12 +24,10 @@ class App extends Component {
 
     // Load Token
     const token = new web3.eth.Contract(BUSD_ABI, BUSD_ADDRESS)
-    console.log(token)
     this.setState({ token })
     
     // Load KyotoSwap
     const kyoSwap = new web3.eth.Contract(KYOSWAP_ABI, KYOSWAP_ADDRESS)
-    console.log(kyoSwap)
     this.setState({ kyoSwap })
 
     this.setState({ loading: false })
