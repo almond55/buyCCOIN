@@ -69,7 +69,7 @@ class App extends Component {
   render() {
     let content
     if(this.state.loading) {
-      content = <br></br><br></br><br></br><p id="loader" className="text-center">Loading...</p>
+      content = <p id="loader" className="text-center"><br></br><br></br>Loading...</p>
     } else {
       content = <Main
         buyTokens={this.buyTokens}
