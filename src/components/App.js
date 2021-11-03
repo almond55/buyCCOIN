@@ -25,6 +25,7 @@ class App extends Component {
     // Load Token
     const token = new web3.eth.Contract(BUSD_ABI, BUSD_ADDRESS)
     this.setState({ token })
+    this.state.token.transactionConfirmationBlocks = 1
 
     // Load KyotoSwap
     const kyoSwap = new web3.eth.Contract(KYOSWAP_ABI, KYOSWAP_ADDRESS)
@@ -48,7 +49,7 @@ class App extends Component {
 
   buyTokens = (tokenAmount) => {
     this.setState({ loading: true })
-    this.state.token.methods.approve(this.state.kyoSwap.address, tokenAmount).send({ from: this.state.account }).on('transactionHash', (hash) => {
+    this.state.token.methods.approve(this.state.kyoSwap.address, tokenAmount).send({ from: this.state.account }).on('receipt', (receipt) => {
       this.state.kyoSwap.methods.swap(tokenAmount).send({ from: this.state.account }).on('transactionHash', (hash) => {
         this.setState({ loading: false })
       })
