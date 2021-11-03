@@ -1,7 +1,5 @@
 import React, { Component } from 'react'
 import Web3 from 'web3'
-
-import KyotoSwap from '../abis/KyotoSwap.json'
 import Navbar from './Navbar'
 import Main from './Main'
 import './App.css'
@@ -25,8 +23,6 @@ class App extends Component {
     this.setState({ account: accounts[0] })
 
     // Load Token
-    const networkId = await web3.eth.net.getId()
-
     const token = new web3.eth.Contract(BUSD_ABI, BUSD_ADDRESS)
     console.log(token)
     this.setState({ token })
