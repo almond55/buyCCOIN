@@ -16,25 +16,39 @@ class Navbar extends Component {
           <img src={kyotoNetwork} height='48' alt=""/>
         </a>
 
-        <ul className="navbar-nav px-3">
-          <li className="nav-item text-nowrap d-none d-sm-none d-sm-block">
-            <small className="text-secondary">
-              <small id="account">{this.props.account}</small>
-            </small>
-
-            { this.props.account
-              ? <img
-                className="ml-2"
-                width='30'
-                height='30'
-                src={`data:image/png;base64,${new Identicon(this.props.account, 30).toString()}`}
-                alt=""
-              />
-              : <span></span>
+        <ul className="navbar-nav px-3 text-white">
+            { ! this.props.account && ! this.props.loading
+              ? <div className="row text-center text-monospace">
+                  <button
+                    type="submit"
+                    onClick={(e) => this.props.on(e)}
+                    className="btn btn-outline-success btn-sm"
+                    style={{ width: '125px', fontSize: '17px'}}
+                    ><b>Connect</b>
+                  </button>&nbsp;
+                </div>
+              : ! this.props.account && this.props.loading
+                ? <div className="row text-center text-monospace">
+                    <button
+                      type="submit"
+                      className="btn btn-outline-success btn-sm"
+                      style={{ width: '125px', fontSize: '17px'}}
+                      disabled>
+                      <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                      <span className="sr-only">Loading...</span>
+                    </button>&nbsp;
+                  </div>
+                : <div className="row text-center text-monospace">
+                    <button
+                      type="submit"
+                      onClick={(e) => this.props.off(e)}
+                      className="btn btn-outline-danger btn-sm"
+                      style={{ width: '125px', fontSize: '17px'}}
+                      >Disconnect
+                    </button>&nbsp;
+                  </div>
             }
-
-          </li>
-        </ul>
+          </ul>
       </nav>
     );
   }
