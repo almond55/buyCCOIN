@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import Identicon from 'identicon.js';
+import Identicon from 'react-identicons';
 import kyotoNetwork from '../KyotoSwapHeader.png';
 
 class Navbar extends Component {
@@ -22,7 +22,7 @@ class Navbar extends Component {
                   <button
                     type="submit"
                     onClick={(e) => this.props.on(e)}
-                    className="btn btn-outline-success btn-sm"
+                    className="btn btn-success btn-sm"
                     style={{ width: '125px', fontSize: '17px'}}
                     ><b>Connect</b>
                   </button>&nbsp;
@@ -32,18 +32,22 @@ class Navbar extends Component {
                     <button
                       type="submit"
                       className="btn btn-outline-success btn-sm"
-                      style={{ width: '125px', fontSize: '17px'}}
+                      style={{ width: '125px', fontSize: '13px'}}
                       disabled>
                       <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                       <span className="sr-only">Loading...</span>
                     </button>&nbsp;
                   </div>
                 : <div className="row text-center text-monospace">
+                    <span style={{fontSize: '12px', margin: 'auto'}}>
+                      {this.props.account}&emsp;
+                    </span>
+                    <Identicon string={this.props.account} size="30" className='align-text-bottom' bg='#343A40'/>&nbsp;
                     <button
                       type="submit"
                       onClick={(e) => this.props.off(e)}
-                      className="btn btn-outline-danger btn-sm"
-                      style={{ width: '125px', fontSize: '17px'}}
+                      className="btn btn-danger btn-sm"
+                      style={{ width: '125px', fontSize: '13px'}}
                       >Disconnect
                     </button>&nbsp;
                   </div>
