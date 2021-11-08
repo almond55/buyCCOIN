@@ -16,9 +16,7 @@ const KYOSWAP_ADDRESS = "0xb00bF0128e988c331916d62A61501F96E728f47a"
 const infuraid = "7f2768cecfee42b7a157ef0cb2e1b051"
 class App extends Component {
   async componentWillMount() {
-    await this.loadWeb3()
     await this.init()
-    await this.loadBlockchainData()
   }
 
   async init() {
@@ -40,7 +38,7 @@ class App extends Component {
     this.setState({web3Modal: web3Modal})
 
     // settings for MetaMask
-    if(window.ethereum!=='undefined'){
+    if(typeof window.ethereum!=='undefined'){
       let network, web3
 
       window.ethereum.autoRefreshOnNetworkChange = false;
@@ -89,12 +87,14 @@ class App extends Component {
         if(provider.accounts[0] !== 'undefined'){
           account = await provider.accounts[0]
           network = await getChain(provider.chainId)
-          web3 = new Web3(new Web3.providers.HttpProvider(`https://${network.network}.infura.io/v3/${infuraid}`))
+          web3 = new Web3(new Web3.providers.HttpProvider(`https://${network.network}.infura.io/v3/7f2768cecfee42b7a157ef0cb2e1b051`))
+
         } else { // handle problem with providing data
           account = null
           network = null
-          web3 = new Web3(new Web3.providers.HttpProvider(`https://${network}.infura.io/v3/${infuraid}`))
+          web3 = new Web3(new Web3.providers.HttpProvider(`https://${network}.infura.io/v3/7f2768cecfee42b7a157ef0cb2e1b051`))
         }
+        
       } else {
         window.alert('Error, provider not recognized')
       }
@@ -106,6 +106,14 @@ class App extends Component {
         provider: provider,
         network: network.network
       })
+
+      let token = this.state.web3.eth.Contract(BUSD_ABI, BUSD_ADDRESS)
+      this.setState({ token })
+      this.state.token.transactionConfirmationBlocks = 1
+
+      let kyoSwap = this.state.web3.eth.Contract(KYOSWAP_ABI, KYOSWAP_ADDRESS)
+      this.setState({ kyoSwap })
+
     } catch(e) {
       console.log("Could not get a wallet connected.")
       return
@@ -122,8 +130,16 @@ class App extends Component {
       } else if (provider.wc){
         account = provider.accounts[0]
         network = await getChain(provider.chainId)
-        web3 = new Web3(new Web3.providers.HttpProvider(`https://${network.network}.infura.io/v3/${infuraid}`))
+        web3 = new Web3(new Web3.providers.HttpProvider(`https://${network.network}.infura.io/v3/7f2768cecfee42b7a157ef0cb2e1b051`))
       }
+
+      let token = this.state.web3.eth.Contract(BUSD_ABI, BUSD_ADDRESS)
+      this.setState({ token })
+      this.state.token.transactionConfirmationBlocks = 1
+
+      let kyoSwap = this.state.web3.eth.Contract(KYOSWAP_ABI, KYOSWAP_ADDRESS)
+      this.setState({ kyoSwap })
+
       this.setState({account: accounts[0], loading: false})
     })
 
@@ -131,18 +147,29 @@ class App extends Component {
     provider.on("chainChanged", async (chainId) => {
       let account, network, web3
       this.setState({network: null, loading:true})
+
       if(provider.isMetaMask && provider.selectedAddress!==null) {
         web3 = new Web3(provider)
         network = await getChain(parseInt(provider.chainId, 16))
+
       } else if(provider.wc) {
         account = provider.accounts[0]
         network = await getChain(chainId)
-        web3 = new Web3(new Web3.providers.HttpProvider(`https://${network.network}.infura.io/v3/${infuraid}`))
+        web3 = new Web3(new Web3.providers.HttpProvider(`https://${network.network}.infura.io/v3/7f2768cecfee42b7a157ef0cb2e1b051`))
+
         this.setState({network: network.network, loading: false})
       } else if (provider.selectedAddress===null) {
-        network = await getChain(parseInt(provider.chainId, 16))
+        network = await getChain(parseInt(provider.chainId, 56))
         this.setState({network: network.network, loading: false})
       }
+
+      let token = this.state.web3.eth.Contract(BUSD_ABI, BUSD_ADDRESS)
+      this.setState({ token })
+      this.state.token.transactionConfirmationBlocks = 1
+
+      let kyoSwap = this.state.web3.eth.Contract(KYOSWAP_ABI, KYOSWAP_ADDRESS)
+      this.setState({ kyoSwap })
+
       this.setState({network: network.network, loading: false})
     })
   }
@@ -193,39 +220,9 @@ class App extends Component {
     }
   }
 
-  async loadBlockchainData() {
-    const web3 = window.web3
-
-    //const accounts = await web3.eth.getAccounts()
-    //this.setState({ account: accounts[0] })
-
-    // Load Token
-    const token = new web3.eth.Contract(BUSD_ABI, BUSD_ADDRESS)
-    this.setState({ token })
-    this.state.token.transactionConfirmationBlocks = 1
-
-    // Load KyotoSwap
-    const kyoSwap = new web3.eth.Contract(KYOSWAP_ABI, KYOSWAP_ADDRESS)
-    this.setState({ kyoSwap })
-
-    this.setState({ loading: false })
-  }
-
-  async loadWeb3() {
-    if (window.ethereum) {
-      window.web3 = new Web3(window.ethereum)
-      await window.ethereum.enable()
-    }
-    else if (window.web3) {
-      window.web3 = new Web3(window.web3.currentProvider)
-    }
-    else {
-      window.alert('Non-Ethereum browser detected. You should consider trying MetaMask!')
-    }
-  }
-
   buyTokens = (tokenAmount) => {
     this.setState({ loading: true })
+    tokenAmount = this.state.web3.utils.toWei(tokenAmount, 'ether')
     this.state.token.methods.approve(this.state.kyoSwap.address, tokenAmount).send({ from: this.state.account }).on('receipt', (receipt) => {
       this.state.kyoSwap.methods.swap(tokenAmount).send({ from: this.state.account }).on('transactionHash', (hash) => {
         this.setState({ loading: false })
@@ -253,7 +250,7 @@ class App extends Component {
   render() {
     let content
     if(this.state.loading) {
-      content = <p id="loader" className="text-center text-white"><br></br><br></br><br></br>Loading...</p>
+      content = <p id="loader" className="text-center text-white"><br></br><br></br><br></br>Please wait...<br></br><br></br><br></br>If you have not connected to this DApp yet, please click the CONNECT button</p>
     } else {
       content = <Main
         offQr={this.offQr}

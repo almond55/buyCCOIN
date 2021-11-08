@@ -17,7 +17,7 @@ class Navbar extends Component {
         </a>
 
         <ul className="navbar-nav px-3 text-white">
-            { ! this.props.account && ! this.props.loading
+            { ! this.props.account
               ? <div className="row text-center text-monospace">
                   <button
                     type="submit"
@@ -27,7 +27,7 @@ class Navbar extends Component {
                     ><b>Connect</b>
                   </button>&nbsp;
                 </div>
-              : ! this.props.account && this.props.loading
+              : this.props.account && this.props.loading
                 ? <div className="row text-center text-monospace">
                     <button
                       type="submit"
