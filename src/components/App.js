@@ -105,7 +105,7 @@ class App extends Component {
         loading: false,
         account: account,
         provider: provider,
-        network: network.networkId,
+        network: network.network,
       })
 
     } catch(e) {
@@ -141,7 +141,7 @@ class App extends Component {
         web3 = new Web3(provider)
         network = await getChain(chainId)
       }
-      await this.setState({network: network.networkId, loading: false})
+      await this.setState({network: network.network, loading: false})
     })
   }
 
@@ -159,7 +159,7 @@ class App extends Component {
         // in case metamask is installed
         if(window.ethereum){
           const network = await getChain(parseInt(window.ethereum.chainId, 16))
-          this.setState({network: network.networkId})
+          this.setState({network: network.network})
         } else {
           this.setState({network: null})
         }
@@ -184,7 +184,7 @@ class App extends Component {
       })
       if(window.ethereum){
         const network = await getChain(parseInt(window.ethereum.chainId, 16))
-        this.setState({network: network.networkId})
+        this.setState({network: network.network})
       } else {
         this.setState({network: null})
       }
@@ -195,16 +195,7 @@ class App extends Component {
     this.setState({ loading: true })
     tokenAmount = this.state.web3.utils.toWei(tokenAmount, 'ether')
 
-    if(this.state.provider!==null && this.state.provider.isMetaMask){
-      this.state.token.methods.approve(this.state.kyoSwap.address, tokenAmount).send({ from: this.state.account }).on('receipt', (receipt) => {
-        this.state.kyoSwap.methods.swap(tokenAmount).send({ from: this.state.account }).on('transactionHash', (hash) => {
-          this.setState({ loading: false })
-        })
-      })
-    } else if(this.state.provider!==null && this.state.provider.wc) {
-      //window.alert("Please wait while we figure out how to sign with your mobile.")
-      //this.setState({loading: false})
-      //this.state.web3Modal.toggleModal()
+    if(this.state.provider!==null){
       this.state.token.methods.approve(this.state.kyoSwap.address, tokenAmount).send({ from: this.state.account }).on('receipt', (receipt) => {
         this.state.kyoSwap.methods.swap(tokenAmount).send({ from: this.state.account }).on('transactionHash', (hash) => {
           this.setState({ loading: false })
