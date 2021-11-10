@@ -25,9 +25,12 @@ class App extends Component {
       walletconnect: {
         package: WalletConnectProvider,
         options: {
-          infuraId: infuraid
-        }
-      }
+          rpc: {
+            56: "https://bsc-dataseed.binance.org/",
+          },
+          network: "binance",
+        },
+      },
     }
 
     var web3Modal = new Web3Modal({
@@ -87,7 +90,7 @@ class App extends Component {
       } else if (provider.wc){ // when walletconnect is chosen
       //  if(provider.accounts[0] !== 'undefined'){
         account = await provider.accounts[0]
-        network = await getChain(provider.chainId)
+        network = await getChain(provider.chainId, 56)
       }
 
         let token = this.state.web3.eth.Contract(BUSD_ABI, BUSD_ADDRESS)
@@ -102,7 +105,7 @@ class App extends Component {
         loading: false,
         account: account,
         provider: provider,
-        network: network.network,
+        network: network.networkId,
       })
 
     } catch(e) {
@@ -138,10 +141,10 @@ class App extends Component {
         web3 = new Web3(provider)
         network = await getChain(chainId)
       }
-      await this.setState({network: network.network, loading: false})
+      await this.setState({network: network.networkId, loading: false})
     })
   }
-  
+
   // disconnect button
   async off(event){
     event.preventDefault()
@@ -156,7 +159,7 @@ class App extends Component {
         // in case metamask is installed
         if(window.ethereum){
           const network = await getChain(parseInt(window.ethereum.chainId, 16))
-          this.setState({network: network.network})
+          this.setState({network: network.networkId})
         } else {
           this.setState({network: null})
         }
@@ -181,7 +184,7 @@ class App extends Component {
       })
       if(window.ethereum){
         const network = await getChain(parseInt(window.ethereum.chainId, 16))
-        this.setState({network: network.network})
+        this.setState({network: network.networkId})
       } else {
         this.setState({network: null})
       }
