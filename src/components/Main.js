@@ -35,7 +35,6 @@ class Main extends Component {
         </div>
         <div className="card mb-4" >
           <div className="card-body">
-          <p>{this.props.network}</p>
             *PLEASE READ BEFORE DOING THE SWAP* <br/><br/>
             This KyotoSwap App is a decentralized application or DApp.<br/><br/>You must be a Desktop or a Laptop user to connect to this DApp by using your Metamask wallet.<br/><br/>Please make sure that you change your wallet network to 'Smart Chain' and the public address shown beside the identicon matches your wallet address before you make the swap.<br/><br/>You must also have BNB (smart chain, BEP-20) tokens in your Metamask wallet to pay for the network transaction fee.<br/><br/>You can only swap BUSD (Binance-Peg BUSD Token, token address: 0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56) for Kyotocoin (KYO, token address: 0xaEBC9EbDd1CD6808b632aA675eA571EEddD0C5b4).<br/><br/>User who does not have BNB & BUSD can purchase it at:<br/>1. CEX.IO by visiting https://cex.io/buy-binance-coin-bnb.<br/>2. Moonpay.com, please make sure to select ‘BNB - Binance Coin (BEP-20)’ for BNB and select  'BUSD - Binance USD (BEP-20)' for BUSD.<br/>3. Trust Wallet Users can also purchase both BNB (Smart Chain) and ‘Binance-Peg BUSD (BEP20)’ through MoonPay.
           </div>
