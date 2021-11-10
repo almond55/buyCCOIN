@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import ethLogo from '../binance-usd-busd-logo.svg'
 import tokenLogo from '../kyoto-coin-token.png'
-import Web3 from 'web3'
+//import Web3 from 'web3'
 
 class BuyForm extends Component {
   constructor(props) {
@@ -17,9 +17,6 @@ class BuyForm extends Component {
           event.preventDefault()
           let tokenAmount
           tokenAmount = this.input.value.toString()
-          console.log(tokenAmount)
-          //tokenAmount = Web3.utils.toWei(tokenAmount, 'Ether')
-          //tokenAmount = tokenAmount * 10 ** 18
           this.props.buyTokens(tokenAmount)
         }}>
         <div className="input-group mb-4">

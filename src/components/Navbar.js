@@ -19,6 +19,9 @@ class Navbar extends Component {
         <ul className="navbar-nav px-3 text-white">
             { ! this.props.account
               ? <div className="row text-center text-monospace">
+                  <span style={{fontSize: '12px', margin: 'auto'}}>
+                    No account detected. Please press the CONNECT button to begin.&emsp;
+                  </span>
                   <button
                     type="submit"
                     onClick={(e) => this.props.on(e)}
