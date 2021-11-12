@@ -59,6 +59,10 @@ class BuyForm extends Component {
           <span className="float-right text-muted">1 BUSD = 10 KYO</span>
         </div>
         <button type="submit" className="btn btn-primary btn-block btn-lg">SWAP!</button>
+        <div>
+          <br></br>
+          Your token balance: {this.props.balance} KYO
+        </div>
       </form>
     );
   }

@@ -20,7 +20,7 @@ class Navbar extends Component {
             { ! this.props.account
               ? <div className="row text-center text-monospace">
                   <span style={{fontSize: '12px', margin: 'auto'}}>
-                    No account detected. Please press the CONNECT button to begin.&emsp;
+                    Please make sure you have already have a MetaMask wallet or a Trust Wallet before pressing the CONNECT button.&emsp;
                   </span>
                   <button
                     type="submit"
