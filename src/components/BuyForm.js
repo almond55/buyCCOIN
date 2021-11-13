@@ -22,7 +22,7 @@ class BuyForm extends Component {
         <div className="input-group mb-4">
           <input
             type="text"
-            onChange={(event) => {
+            onChange={(event) => { 
               const tokenAmount = this.input.value.toString()
               this.setState({
                 output: tokenAmount * 10

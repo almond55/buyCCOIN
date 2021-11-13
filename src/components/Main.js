@@ -16,6 +16,7 @@ class Main extends Component {
       content = <BuyForm
         balance={this.props.balance}
         buyTokens={this.props.buyTokens}
+        loading={this.props.loading}
       />
     }
 

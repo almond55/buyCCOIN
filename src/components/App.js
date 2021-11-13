@@ -210,17 +210,13 @@ class App extends Component {
       this.state.token.methods.approve(this.state.kyoSwap.address, tokenAmount).send({ from: this.state.account }).on('receipt', (receipt) => {
         this.state.kyoSwap.methods.swap(tokenAmount).send({ from: this.state.account }).on('transactionHash', (hash) => {
           this.setState({ loading: false })
-        }).on('error', (error) => {
-          window.alert("You have cancelled the transaction.")
-          window.location.reload()
         })
       }).on('error', (error) => { 
-        window.alert("You have cancelled the transaction.")
-        window.location.reload()
+        this.setState({ loading: false })
       })
     } else {
       window.alert("Please click the CONNECT button to link your wallet first.")
-      this.setState({loading: false})
+      this.setState({ loading: false })
     }
   }
 
