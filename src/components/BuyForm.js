@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import ethLogo from '../binance-usd-busd-logo.svg'
-import tokenLogo from '../kyoto-coin-token.png'
+import ethLogo from '../USDC.png'
+import tokenLogo from '../CCOIN.png'
 //import Web3 from 'web3'
 
 class BuyForm extends Component {
@@ -25,7 +25,7 @@ class BuyForm extends Component {
             onChange={(event) => { 
               const tokenAmount = this.input.value.toString()
               this.setState({
-                output: tokenAmount * 10
+                output: tokenAmount * 20
               })
             }}
             ref={(input) => { this.input = input }}
@@ -35,7 +35,7 @@ class BuyForm extends Component {
           <div className="input-group-append">
             <div className="input-group-text">
               <img src={ethLogo} height='32' alt=""/>
-              &nbsp;&nbsp;&nbsp; BUSD
+              &nbsp;&nbsp;&nbsp; USDC
             </div>
           </div>
         </div>
@@ -50,22 +50,26 @@ class BuyForm extends Component {
           <div className="input-group-append">
             <div className="input-group-text">
               <img src={tokenLogo} height='32' alt=""/>
-              &nbsp; KYO
+              &nbsp; CCOIN
             </div>
           </div>
         </div>
         <div className="mb-5">
           <span className="float-left text-muted">Exchange Rate</span>
-          <span className="float-right text-muted">1 BUSD = 10 KYO</span>
+          <span className="float-right text-muted">1 USDC = 20 CCOIN</span>
         </div>
-        <button type="submit" className="btn btn-primary btn-block btn-lg">SWAP!</button>
+        <button type="submit" className="btn btn-primary btn-block btn-lg" span style={{backgroundColor: "black"}}>
+          SWAP!
+          </button>
         <div>
           <br></br>
-          Your token balance: {this.props.balance} KYO
+          Your token balance: {this.props.balance} CCOIN
         </div>
       </form>
     );
   }
 }
+
+
 
 export default BuyForm;
