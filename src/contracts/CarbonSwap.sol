@@ -405,7 +405,8 @@ contract CarbonSwap is IERC20, Ownable {
 			"USDC in wallet too low."
 		);
 
-		uint256 _amountccoin = _amountusdc.mul(20);
+        // Because USDC is 6 decimals
+		uint256 _amountccoin = _amountusdc.mul(20).mul(10**12);
 
 		require(usdc.allowance(_msgSender(), address(this)) >= _amountusdc,
 			"USDC allowance too low."
