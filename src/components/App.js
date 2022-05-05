@@ -67,9 +67,9 @@ class App extends Component {
   }
 
   buyTokens = async(tokenAmount) => {
-    let txn, txhash
+    let txn, txhash, swaptxn, swaptxhash
 
-    window.alert('After you click the OK button, you will be taken to your wallet app where you will be prompted to approve 2 back to back transactions on your wallet. After you approve the first one, please wait until the second prompt appears and approve that too.')    
+    window.alert('After you click the OK button, you will be taken to your wallet app where you will be prompted to approve 2 back to back transactions on your wallet. After you approve the first one, please wait until the second prompt appears and approve that too. You might need to refresh the page to see the correct balance on the site afterwards.')    
     this.setState({ loading: true })    
     tokenAmount = ethers.utils.parseUnits(tokenAmount.toString(), 6)
     console.log(tokenAmount)
@@ -79,15 +79,17 @@ class App extends Component {
       txhash = txn.hash
       console.log(txhash)
 
-      await this.state.provider.waitForTransaction(txhash).then(
-        this.state.carbonSwap.swap(tokenAmount)
+      await this.state.provider.waitForTransaction(txhash, 4).then(
+        swaptxn = await this.state.carbonSwap.swap(tokenAmount)).then(
+        swaptxhash = swaptxn.hash).then(console.log(swaptxhash)).then(
+        await this.state.provider.waitForTransaction(swaptxhash, 6)).then(
+      	this.refreshBalance()).then(
+        this.setState({ loading: false })
       )
 
       this.state.provider.on('error', (error) => {
         window.alert(error)
-      })
-      
-      this.setState({ loading: false })
+      })  
       
     } else {
       window.alert("Please click the CONNECT button to link your wallet first.")
